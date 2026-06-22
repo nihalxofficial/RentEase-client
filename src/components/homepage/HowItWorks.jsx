@@ -116,7 +116,10 @@ export default function HowItWorks({
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
-            {title}
+            How It{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-700">
+              Works
+            </span>
           </h2>
           <p className="text-gray-500 mt-3 max-w-2xl mx-auto">
             {subtitle}

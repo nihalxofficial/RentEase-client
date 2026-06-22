@@ -62,7 +62,10 @@ export default function Newsletter({
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
-            {title}
+            Subscribe to Our{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-700">
+              Newsletter
+            </span>
           </h2>
           <p className="text-gray-500 mt-3 max-w-2xl mx-auto">
             {subtitle}
@@ -114,7 +117,7 @@ export default function Newsletter({
 
                 {/* Title */}
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 leading-tight">
-                  Get <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-white">Exclusive</span> Property Updates
+                  Get <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-300">Exclusive</span> Property Updates
                 </h2>
 
                 <p className="text-blue-100 text-sm md:text-base max-w-lg leading-relaxed">

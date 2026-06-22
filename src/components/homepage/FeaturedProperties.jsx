@@ -202,6 +202,9 @@ export default function FeaturedProperties({
     return `$${price.toLocaleString()}`;
   };
 
+  // Split title into two parts for gradient effect
+  const titleParts = title.split(' ');
+
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -219,7 +222,10 @@ export default function FeaturedProperties({
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
-            {title}
+            {titleParts.slice(0, Math.ceil(titleParts.length / 2)).join(' ')}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-700">
+              {titleParts.slice(Math.ceil(titleParts.length / 2)).join(' ')}
+            </span>
           </h2>
           <p className="text-gray-500 mt-3 max-w-2xl mx-auto">
             {subtitle}
