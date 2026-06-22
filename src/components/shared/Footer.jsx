@@ -1,4 +1,3 @@
-// src/components/shared/Footer.jsx
 "use client";
 
 import { useState } from "react";
@@ -70,8 +69,8 @@ export default function Footer({
 
   return (
     <footer className="relative bg-gray-900 text-white overflow-hidden">
-      {/* Decorative Top Gradient */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600" />
+      {/* Decorative Top linear */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-blue-400 via-blue-500 to-blue-600" />
 
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
@@ -85,13 +84,13 @@ export default function Footer({
             {/* Logo - Same as Navbar */}
             <Link 
               href="/" 
-              className="cursor-pointer inline-flex items-center gap-2.5 group flex-shrink-0 transition-transform hover:scale-[1.02] active:scale-95"
+              className="cursor-pointer inline-flex items-center gap-2.5 group shrink-0 transition-transform hover:scale-[1.02] active:scale-95"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-[0_4px_14px_rgba(37,99,235,0.4)] flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(37,99,235,0.5)] group-hover:brightness-105">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-[0_4px_14px_rgba(37,99,235,0.4)] shrink-0 transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(37,99,235,0.5)] group-hover:brightness-105">
                 <Building2 className="w-5 h-5 text-white" strokeWidth={2.2} />
               </div>
-              <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-                Rent<span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Ease</span>
+              <span className="text-2xl font-extrabold tracking-tight bg-linear-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                Rent<span className="bg-linear-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Ease</span>
               </span>
             </Link>
 
@@ -168,11 +167,11 @@ export default function Footer({
             {/* Contact Info */}
             <div className="space-y-3 mb-4">
               <div className="flex items-start gap-3 text-gray-400 text-sm">
-                <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" strokeWidth={2} />
                 <span>{contactInfo.address}</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Phone className="w-4 h-4 text-blue-400 flex-shrink-0" strokeWidth={2} />
+                <Phone className="w-4 h-4 text-blue-400 shrink-0" strokeWidth={2} />
                 <a 
                   href={`tel:${contactInfo.phone}`} 
                   className="cursor-pointer hover:text-blue-400 transition-colors"
@@ -181,7 +180,7 @@ export default function Footer({
                 </a>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" strokeWidth={2} />
+                <Mail className="w-4 h-4 text-blue-400 shrink-0" strokeWidth={2} />
                 <a 
                   href={`mailto:${contactInfo.email}`} 
                   className="cursor-pointer hover:text-blue-400 transition-colors"
@@ -207,7 +206,7 @@ export default function Footer({
                 />
                 <button
                   type="submit"
-                  className="cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg text-white hover:shadow-lg transition-all duration-300 hover:scale-105"
+                  className="cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 p-2 bg-linear-to-r from-blue-600 to-blue-700 rounded-lg text-white hover:shadow-lg transition-all duration-300 hover:scale-105"
                 >
                   {isSubscribed ? (
                     <CheckCircle className="w-4 h-4" strokeWidth={2} />

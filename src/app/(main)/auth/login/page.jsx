@@ -79,7 +79,7 @@ export default function LoginPage() {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50/50 via-white to-white py-20 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-blue-50/50 via-white to-white py-20 px-4">
       <div className="w-full max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -88,7 +88,7 @@ export default function LoginPage() {
           className="grid lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden shadow-2xl"
         >
           {/* Left Side - Hero Image & Content */}
-          <div className="relative hidden lg:block h-full min-h-[600px] overflow-hidden">
+          <div className="relative hidden lg:block h-full min-h-150 overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0">
               <Image
@@ -101,7 +101,7 @@ export default function LoginPage() {
                 priority
               />
               {/* Overlay for text visibility */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/70 via-blue-700/60 to-blue-800/70" />
+              <div className="absolute inset-0 bg-linear-to-br from-blue-600/70 via-blue-700/60 to-blue-800/70" />
             </div>
 
             {/* Decorative Elements */}
@@ -131,7 +131,7 @@ export default function LoginPage() {
               >
                 Welcome Back
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-100 to-blue-400">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-100 to-blue-400">
                   To RentEase
                 </span>
               </motion.h2>
@@ -157,7 +157,7 @@ export default function LoginPage() {
                   const Icon = feature.icon;
                   return (
                     <div key={index} className="flex items-center gap-3 bg-white/15 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/15">
-                      <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
                         <Icon className="w-4 h-4 text-white" strokeWidth={2} />
                       </div>
                       <span className="text-white/90 text-sm font-medium">{feature.text}</span>
@@ -195,11 +195,11 @@ export default function LoginPage() {
           <div className="bg-white p-8 md:p-10 lg:p-12">
             {/* Logo */}
             <Link href="/" className="inline-flex items-center gap-2.5 group mb-8">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/30 flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/30 shrink-0">
                 <Building2 className="w-5 h-5 text-white" strokeWidth={2} />
               </div>
-              <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-                Rent<span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Ease</span>
+              <span className="text-2xl font-extrabold bg-linear-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                Rent<span className="bg-linear-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Ease</span>
               </span>
             </Link>
 
@@ -298,7 +298,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full cursor-pointer px-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-[0_4px_14px_rgba(37,99,235,0.35)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.45)] transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+                className="w-full cursor-pointer px-6 py-3.5 bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-[0_4px_14px_rgba(37,99,235,0.35)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.45)] transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed mt-2"
               >
                 {isLoading ? (
                   <>
@@ -315,7 +315,7 @@ export default function LoginPage() {
             </Form>
 
             <p className="text-center text-sm text-gray-500 mt-6">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/auth/register" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
                 Create Account
               </Link>
