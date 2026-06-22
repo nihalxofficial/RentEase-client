@@ -110,107 +110,67 @@ export default function FeaturedProperties({
       featured: true,
     },
   ],
-  userId = null, // Pass user ID from parent for wishlist
-  onWishlistToggle = null, // Optional callback for parent component
+  userId = null,
+  onWishlistToggle = null,
 }) {
   const [properties, setProperties] = useState(initialProperties);
-  const [wishlistItems, setWishlistItems] = useState([]); // Separate state for wishlist
+  const [wishlistItems, setWishlistItems] = useState([]);
   const [hoveredCard, setHoveredCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch user's wishlist on component mount
   useEffect(() => {
     if (userId) {
       fetchUserWishlist();
     }
   }, [userId]);
 
-  /**
-   * fetchUserWishlist - Get user's wishlisted property IDs from API
-   */
   const fetchUserWishlist = async () => {
     try {
-      // Replace with your actual API endpoint
       const response = await fetch(`/api/wishlist?userId=${userId}`);
       if (!response.ok) throw new Error("Failed to fetch wishlist");
       const data = await response.json();
-      // data should be an array of property IDs
       setWishlistItems(data);
     } catch (error) {
       console.error("Error fetching wishlist:", error);
-      // If API fails, use localStorage as fallback
       const savedWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
       setWishlistItems(savedWishlist);
     }
   };
 
-  /**
-   * handleWishlist - Toggle property wishlist status
-   * @param {string|number} propertyId - The ID of the property
-   */
   const handleWishlist = async (propertyId) => {
     if (isLoading) return;
-
     const isWishlisted = wishlistItems.includes(propertyId);
 
     try {
       setIsLoading(true);
-
-      // Optimistic update - update UI immediately
       setWishlistItems((prev) =>
-        isWishlisted
-          ? prev.filter((id) => id !== propertyId)
-          : [...prev, propertyId]
+        isWishlisted ? prev.filter((id) => id !== propertyId) : [...prev, propertyId]
       );
 
-      // API Call
       const response = await fetch("/api/wishlist", {
         method: isWishlisted ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          propertyId: propertyId,
-          userId: userId,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ propertyId, userId }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update wishlist");
-      }
-
+      if (!response.ok) throw new Error("Failed to update wishlist");
       const data = await response.json();
 
-      // Update localStorage as fallback
       const savedWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
       if (isWishlisted) {
-        localStorage.setItem(
-          "wishlist",
-          JSON.stringify(savedWishlist.filter((id) => id !== propertyId))
-        );
+        localStorage.setItem("wishlist", JSON.stringify(savedWishlist.filter((id) => id !== propertyId)));
       } else {
-        localStorage.setItem(
-          "wishlist",
-          JSON.stringify([...savedWishlist, propertyId])
-        );
+        localStorage.setItem("wishlist", JSON.stringify([...savedWishlist, propertyId]));
       }
 
-      // Call parent callback if provided
       if (onWishlistToggle) {
         onWishlistToggle(propertyId, !isWishlisted, data);
       }
-
-      console.log(`Wishlist ${isWishlisted ? "removed" : "added"} for property ${propertyId}`);
     } catch (error) {
       console.error("Error updating wishlist:", error);
-
-      // Rollback on error
       setWishlistItems((prev) =>
-        isWishlisted
-          ? [...prev, propertyId]
-          : prev.filter((id) => id !== propertyId)
+        isWishlisted ? [...prev, propertyId] : prev.filter((id) => id !== propertyId)
       );
-
       alert("Failed to update wishlist. Please try again.");
     } finally {
       setIsLoading(false);
@@ -243,7 +203,7 @@ export default function FeaturedProperties({
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white via-blue-50/20 to-white">
+    <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -267,7 +227,7 @@ export default function FeaturedProperties({
         </motion.div>
 
         {/* Property Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {properties.map((property, index) => {
             const statusInfo = getStatusBadge(property.status);
             const isHovered = hoveredCard === property.id;
@@ -281,14 +241,11 @@ export default function FeaturedProperties({
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 onMouseEnter={() => setHoveredCard(property.id)}
                 onMouseLeave={() => setHoveredCard(null)}
-                className="group relative bg-white/80 backdrop-blur-sm rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(37,99,235,0.08)] transition-all duration-500 border border-white/50 hover:border-blue-100/50"
+                className="group relative bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-400 border-2 border-gray-100/60 hover:border-blue-200/70 hover:-translate-y-2"
               >
-                {/* Glass effect overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent pointer-events-none" />
-                
                 {/* Image Container */}
                 <div className="relative overflow-hidden">
-                  <div className="relative h-60 w-full">
+                  <div className="relative h-56 w-full">
                     <Image
                       src={property.image}
                       alt={property.title}
@@ -297,7 +254,6 @@ export default function FeaturedProperties({
                         isHovered ? "scale-110" : "scale-100"
                       }`}
                     />
-                    {/* Premium gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent" />
                   </div>
@@ -310,14 +266,14 @@ export default function FeaturedProperties({
                     <span>{statusInfo.label}</span>
                   </div>
 
-                  {/* Wishlist Button - Uses separate wishlist state */}
+                  {/* Wishlist Button */}
                   <button
                     onClick={() => handleWishlist(property.id)}
                     disabled={isLoading}
                     className={`absolute cursor-pointer top-4 right-4 p-2.5 rounded-full transition-all duration-300 ${
                       isWishlisted
                         ? "bg-rose-500 shadow-[0_4px_16px_rgba(244,63,94,0.3)]"
-                        : "bg-white/80 backdrop-blur-sm hover:bg-white shadow-md hover:shadow-lg"
+                        : "bg-white/90 backdrop-blur-sm hover:bg-white shadow-md hover:shadow-lg"
                     } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                     aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                   >

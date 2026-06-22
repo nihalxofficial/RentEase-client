@@ -1,5 +1,6 @@
 import FeaturedProperties from "@/components/homepage/FeaturedProperties";
 import HeroBanner from "@/components/homepage/HeroBanner";
+import WhyChooseUs from "@/components/homepage/WhyChooseUs";
 import Image from "next/image";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <div>
       <HeroBanner/>
       <FeaturedProperties/>
+      <WhyChooseUs/>
     </div>
   );
 }
