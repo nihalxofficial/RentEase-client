@@ -1,4 +1,3 @@
-// src/components/dashboard/OwnerSidebar.jsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,8 +11,6 @@ import {
   PlusCircle,
   CalendarCheck,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
   Settings,
   Menu,
   X,
@@ -23,11 +20,11 @@ import { authClient } from "@/lib/auth-client";
 // ==================== OWNER SIDEBAR ====================
 export default function OwnerSidebar({ isOpen = true }) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   // Close mobile sidebar on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileOpen(false);
   }, [pathname]);
 
@@ -66,10 +63,6 @@ export default function OwnerSidebar({ isOpen = true }) {
     await authClient.signOut();
   };
 
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
   const getUserInitials = (name) => {
     if (!name) return "U";
     return name
@@ -78,6 +71,10 @@ export default function OwnerSidebar({ isOpen = true }) {
       .join("")
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
   };
 
   const NavItem = ({ item }) => {
@@ -91,19 +88,16 @@ export default function OwnerSidebar({ isOpen = true }) {
         className={`
           flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
           ${isActive 
-            ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-[0_4px_14px_rgba(37,99,235,0.3)]" 
+            ? "bg-linear-to-r from-blue-600 to-blue-700 text-white shadow-[0_4px_14px_rgba(37,99,235,0.3)]" 
             : "text-gray-600 hover:text-blue-700 hover:bg-blue-50/80"
           }
-          ${isCollapsed ? "justify-center px-3" : ""}
         `}
       >
-        <Icon className={`${isCollapsed ? "w-5 h-5" : "w-4.5 h-4.5"} flex-shrink-0`} strokeWidth={2.2} />
-        {!isCollapsed && (
-          <span className={`text-sm font-medium ${isActive ? "text-white" : ""}`}>
-            {item.name}
-          </span>
-        )}
-        {isActive && !isCollapsed && (
+        <Icon className="w-4.5 h-4.5 shrink-0" strokeWidth={2.2} />
+        <span className={`text-sm font-medium ${isActive ? "text-white" : ""}`}>
+          {item.name}
+        </span>
+        {isActive && (
           <motion.span
             layoutId="sidebar-active-indicator"
             className="ml-auto w-1.5 h-6 bg-white rounded-full shadow-sm"
@@ -115,10 +109,14 @@ export default function OwnerSidebar({ isOpen = true }) {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button - Hidden when sidebar is open */}
       <button
-        onClick={() => setIsMobileOpen(true)}
-        className="lg:hidden fixed top-20 left-4 z-50 p-2 bg-white rounded-xl shadow-lg border border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer"
+        onClick={toggleMobileSidebar}
+        className={`
+          lg:hidden fixed top-20 left-4 z-50 p-2 bg-white rounded-xl shadow-lg border border-gray-100 hover:bg-gray-50 transition-all duration-300 cursor-pointer
+          ${isMobileOpen ? "opacity-0 pointer-events-none scale-75" : "opacity-100 pointer-events-auto scale-100"}
+        `}
+        aria-label={isMobileOpen ? "Close menu" : "Open menu"}
       >
         <Menu className="w-5 h-5 text-gray-600" strokeWidth={2.2} />
       </button>
@@ -141,47 +139,41 @@ export default function OwnerSidebar({ isOpen = true }) {
         className={`
           fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] bg-white/95 backdrop-blur-xl border-r border-gray-200/60
           transition-all duration-300 flex flex-col overflow-hidden
-          ${isCollapsed ? "w-20" : "w-64"}
+          w-64
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
-        animate={{
-          width: isCollapsed ? 80 : 256,
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        {/* Close Mobile Button */}
+        {/* Close Mobile Button - Only shows when sidebar is open */}
         <button
           onClick={() => setIsMobileOpen(false)}
-          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+          className={`
+            lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer
+            ${isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+          `}
         >
           <X className="w-5 h-5 text-gray-600" strokeWidth={2.2} />
         </button>
 
         {/* User Profile */}
-        <div className={`
-          flex items-center gap-3 p-4 border-b border-gray-100/60 flex-shrink-0
-          ${isCollapsed ? "justify-center" : ""}
-        `}>
-          <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+        <div className="flex items-center gap-3 p-4 border-b border-gray-100/60 shrink-0">
+          <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 bg-linear-to-br from-blue-600 to-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
             {user?.image ? (
               <Image src={user.image} alt="avatar" fill className="object-cover" />
             ) : (
               getUserInitials(user?.name)
             )}
           </div>
-          {!isCollapsed && (
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-gray-900 truncate">
-                {user?.name || "User"}
-              </p>
-              <p className="text-xs text-gray-500 truncate">
-                {user?.email}
-              </p>
-              <span className="inline-block mt-0.5 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-semibold rounded-full">
-                Owner
-              </span>
-            </div>
-          )}
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-gray-900 truncate">
+              {user?.name || "User"}
+            </p>
+            <p className="text-xs text-gray-500 truncate">
+              {user?.email}
+            </p>
+            <span className="inline-block mt-0.5 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-semibold rounded-full">
+              Owner
+            </span>
+          </div>
         </div>
 
         {/* Navigation */}
@@ -191,41 +183,17 @@ export default function OwnerSidebar({ isOpen = true }) {
           ))}
         </nav>
 
-        {/* Bottom Section */}
-        <div className={`
-          border-t border-gray-100/60 p-3 space-y-2 flex-shrink-0
-          ${isCollapsed ? "flex flex-col items-center" : ""}
-        `}>
-          {/* Logout Button */}
+        {/* Bottom Section - Logout Only */}
+        <div className="border-t border-gray-100/60 p-3 shrink-0">
           <button
             onClick={handleLogout}
             className={`
               flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 w-full
               text-red-600 hover:bg-red-50 cursor-pointer
-              ${isCollapsed ? "justify-center px-3" : ""}
             `}
           >
-            <LogOut className={`${isCollapsed ? "w-5 h-5" : "w-4.5 h-4.5"} flex-shrink-0`} strokeWidth={2.2} />
-            {!isCollapsed && <span className="text-sm font-medium">Logout</span>}
-          </button>
-
-          {/* Collapse Toggle - Desktop Only */}
-          <button
-            onClick={toggleCollapse}
-            className={`
-              hidden lg:flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 w-full
-              text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer
-              ${isCollapsed ? "justify-center px-3" : ""}
-            `}
-          >
-            {isCollapsed ? (
-              <ChevronRight className="w-4.5 h-4.5" strokeWidth={2.2} />
-            ) : (
-              <>
-                <ChevronLeft className="w-4.5 h-4.5" strokeWidth={2.2} />
-                <span className="text-sm font-medium">Collapse</span>
-              </>
-            )}
+            <LogOut className="w-4.5 h-4.5 shrink-0" strokeWidth={2.2} />
+            <span className="text-sm font-medium">Logout</span>
           </button>
         </div>
       </motion.aside>

@@ -1,4 +1,4 @@
-// src/components/dashboard/DashboardNavbar.jsx
+// src/components/dashboard/DashboardNavbar.jsx - Updated (remove the mobile hamburger)
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -15,8 +15,6 @@ import {
   LayoutDashboard,
   Building2,
   ChevronDown,
-  Menu,
-  X,
   MessageCircle,
   CalendarCheck,
   CheckCircle,
@@ -155,19 +153,24 @@ export default function DashboardNavbar({ toggleSidebar, isSidebarOpen }) {
     >
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Left Side */}
+          {/* Left Side - Logo */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={toggleSidebar}
-              className="lg:hidden p-2 rounded-xl hover:bg-gray-100/80 transition-all cursor-pointer text-gray-600"
-              aria-label="Toggle sidebar"
-            >
-              <Menu className="w-5 h-5" strokeWidth={2.2} />
-            </button>
-            <div>
-              <h2 className="text-lg font-bold text-gray-900 hidden sm:block">
+            {/* Website Logo - Links to Home */}
+            <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0 transition-transform hover:scale-[1.02] active:scale-95">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-[0_4px_14px_rgba(37,99,235,0.4)] flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(37,99,235,0.5)] group-hover:brightness-105">
+                <Building2 className="w-4.5 h-4.5 text-white" strokeWidth={2.2} />
+              </div>
+              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                Rent<span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Ease</span>
+              </span>
+            </Link>
+
+            {/* Page Title */}
+            <div className="hidden sm:block">
+              <span className="text-gray-400 mx-2">/</span>
+              <span className="text-sm font-medium text-gray-600">
                 {currentTitle}
-              </h2>
+              </span>
             </div>
           </div>
 
