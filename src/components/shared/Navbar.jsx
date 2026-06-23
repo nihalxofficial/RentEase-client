@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
   Building2,
@@ -31,6 +31,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -79,6 +80,7 @@ export default function Navbar() {
     await authClient.signOut();
     setIsDropdownOpen(false);
     setIsMenuOpen(false);
+    router.push("/");
   };
 
   const NavLink = ({ link, isMobile = false }) => {

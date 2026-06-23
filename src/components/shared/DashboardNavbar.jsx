@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -33,6 +33,7 @@ const pageTitles = {
 };
 
 export default function DashboardNavbar({ toggleSidebar, isSidebarOpen }) {
+  const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -68,6 +69,7 @@ export default function DashboardNavbar({ toggleSidebar, isSidebarOpen }) {
 
   const handleLogout = async () => {
     await authClient.signOut();
+    router.push("/");
   };
 
   const getUserInitials = (name) => {
