@@ -59,7 +59,7 @@ import { toast } from "react-toastify";
 import { addReview } from "@/lib/action/reviews";
 
 // ==================== PROPERTY DETAILS CLIENT ====================
-export default function PropertyDetailsClient({ property, initialReviews = [], tenant }) {
+export default function PropertyDetailsClient({ property, initialReviews = [], tenant, propertyId }) {
   const router = useRouter();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
@@ -278,19 +278,27 @@ export default function PropertyDetailsClient({ property, initialReviews = [], t
 
     setIsSubmittingReview(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
       const newReview = {
         tenantId: tenant?.id,
+        propertyId : propertyId,
         rating: selectedRating,
         comment: reviewComment.trim(),
-        // date: new Date().toISOString(),
       };
 
-      const result = await addReview(newReview);
-      console.log(result);
+      const result = await addReview(newReview, propertyId);
       
-      setReviews([newReview, ...reviews]);
+      // Add the new review to the list with the proper structure
+      const reviewWithUser = {
+        ...result,
+        tenant: {
+          _id: tenant?.id,
+          name: tenant?.name || "You",
+          email: tenant?.email,
+          image: tenant?.image || null,
+        }
+      };
+      
+      setReviews([reviewWithUser, ...reviews]);
       setSelectedRating(0);
       setReviewComment("");
       toast.success("Review submitted successfully!");
@@ -321,6 +329,7 @@ export default function PropertyDetailsClient({ property, initialReviews = [], t
 
   // ========== FORMAT DATE ==========
   const formatDate = (date) => {
+    if (!date) return "Recently";
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
@@ -678,31 +687,31 @@ export default function PropertyDetailsClient({ property, initialReviews = [], t
             </form>
           </div>
 
-          {/* Reviews List */}
+          {/* Reviews List - Using real data structure */}
           <div className="space-y-4">
             {reviews.map((review) => (
               <div
-                key={review.id}
+                key={review._id || review.id}
                 className="bg-white rounded-2xl p-5 border-2 border-gray-100/60 hover:border-blue-100/50 transition-all duration-300"
               >
                 <div className="flex items-start gap-3">
                   <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-xs">
-                    {review.user.image ? (
+                    {review.tenant?.image ? (
                       <Image
-                        src={review.user.image}
-                        alt={review.user.name}
+                        src={review.tenant.image}
+                        alt={review.tenant.name}
                         fill
                         className="object-cover"
                       />
                     ) : (
-                      review.user.name.split(' ').map(n => n[0]).join('').toUpperCase()
+                      review.tenant?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'
                     )}
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center flex-wrap gap-2">
                       <h4 className="font-semibold text-gray-900 text-sm">
-                        {review.user.name}
+                        {review.tenant?.name || 'Anonymous'}
                       </h4>
                       <div className="flex items-center gap-0.5">
                         {renderStars(review.rating, "sm")}
@@ -713,7 +722,7 @@ export default function PropertyDetailsClient({ property, initialReviews = [], t
                     </p>
                     <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
                       <Clock className="w-3 h-3" strokeWidth={2} />
-                      {formatDate(review.date)}
+                      {formatDate(review.createdAt || review.date)}
                     </p>
                   </div>
                 </div>
