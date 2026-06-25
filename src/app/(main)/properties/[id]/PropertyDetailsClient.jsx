@@ -56,9 +56,10 @@ import {
   FaPinterest,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { addReview } from "@/lib/action/reviews";
 
 // ==================== PROPERTY DETAILS CLIENT ====================
-export default function PropertyDetailsClient({ property, initialReviews = [] }) {
+export default function PropertyDetailsClient({ property, initialReviews = [], tenant }) {
   const router = useRouter();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
@@ -280,15 +281,14 @@ export default function PropertyDetailsClient({ property, initialReviews = [] })
       await new Promise((resolve) => setTimeout(resolve, 1500));
       
       const newReview = {
-        id: Date.now(),
-        user: {
-          name: "You",
-          avatar: null,
-        },
+        tenantId: tenant?.id,
         rating: selectedRating,
         comment: reviewComment.trim(),
-        date: new Date().toISOString(),
+        // date: new Date().toISOString(),
       };
+
+      const result = await addReview(newReview);
+      console.log(result);
       
       setReviews([newReview, ...reviews]);
       setSelectedRating(0);
@@ -400,7 +400,7 @@ export default function PropertyDetailsClient({ property, initialReviews = [] })
               <button
                 onClick={(e) => { e.stopPropagation(); toggleWishlist(); }}
                 disabled={isWishlistLoading}
-                className={`absolute top-4 right-4 p-3 rounded-full transition-all duration-300 shadow-lg ${
+                className={`absolute cursor-pointer top-4 right-4 p-3 rounded-full transition-all duration-300 shadow-lg ${
                   isWishlisted
                     ? "bg-rose-500 shadow-[0_4px_16px_rgba(244,63,94,0.3)]"
                     : "bg-white/90 backdrop-blur-sm hover:bg-white shadow-md hover:shadow-lg"
@@ -565,7 +565,7 @@ export default function PropertyDetailsClient({ property, initialReviews = [] })
 
             {/* Action Buttons */}
             <div className="space-y-2 pt-2">
-              <button className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-[0_4px_14px_rgba(37,99,235,0.35)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.45)] transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2">
+              <button className="w-full px-6 py-3 cursor-pointer bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-[0_4px_14px_rgba(37,99,235,0.35)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.45)] transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2">
                 <Calendar className="w-4 h-4" strokeWidth={2} />
                 <span>Book Property</span>
               </button>
@@ -573,7 +573,7 @@ export default function PropertyDetailsClient({ property, initialReviews = [] })
               <div className="flex gap-2">
                 <button 
                   onClick={() => setIsShareModalOpen(true)}
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
+                  className="flex-1 flex cursor-pointer items-center justify-center gap-2 px-3 py-2 bg-white border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
                 >
                   <Share2 className="w-4 h-4" strokeWidth={2} />
                   Share
@@ -581,7 +581,7 @@ export default function PropertyDetailsClient({ property, initialReviews = [] })
                 <button
                   onClick={toggleWishlist}
                   disabled={isWishlistLoading}
-                  className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl transition-all duration-300 text-sm font-medium ${
+                  className={`flex-1 flex cursor-pointer items-center justify-center gap-2 px-3 py-2 rounded-xl transition-all duration-300 text-sm font-medium ${
                     isWishlisted
                       ? "bg-rose-50 text-rose-600 border-2 border-rose-200 hover:bg-rose-100"
                       : "bg-white border-2 border-gray-200 hover:bg-gray-50 text-gray-700"
@@ -661,7 +661,7 @@ export default function PropertyDetailsClient({ property, initialReviews = [] })
               <button
                 type="submit"
                 disabled={isSubmittingReview}
-                className="px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-[0_4px_14px_rgba(37,99,235,0.25)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
+                className="px-5 cursor-pointer py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-[0_4px_14px_rgba(37,99,235,0.25)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
               >
                 {isSubmittingReview ? (
                   <>
@@ -687,9 +687,9 @@ export default function PropertyDetailsClient({ property, initialReviews = [] })
               >
                 <div className="flex items-start gap-3">
                   <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-xs">
-                    {review.user.avatar ? (
+                    {review.user.image ? (
                       <Image
-                        src={review.user.avatar}
+                        src={review.user.image}
                         alt={review.user.name}
                         fill
                         className="object-cover"

@@ -28,7 +28,7 @@ export const serverFetch = async (path, requireAuth = false) => {
     return handleResponse(res);
 };
 
-export const serverMutation = async (path, data, method = "POST") => {
+export const serverMutation = async (path, data="", method = "POST") => {
     const token = await getToken()
     const res = await fetch(`${Api}${path}`, {
         method: method,
