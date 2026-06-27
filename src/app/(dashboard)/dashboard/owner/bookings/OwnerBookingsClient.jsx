@@ -304,7 +304,7 @@ export default function OwnerBookingsClient({ bookings: initialBookings = [], tr
         <button
           onClick={() => fetchBookings()}
           disabled={isRefreshing}
-          className="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2.5 bg-white text-blue-600 font-medium rounded-xl border-2 border-blue-100 hover:border-blue-400 shadow-sm hover:shadow-[0_8px_24px_rgba(37,99,235,0.12)] transition-all duration-300 hover:-translate-y-1 disabled:opacity-50"
+          className="mt-4 cursor-pointer md:mt-0 inline-flex items-center gap-2 px-4 py-2.5 bg-white text-blue-600 font-medium rounded-xl border-2 border-blue-100 hover:border-blue-400 shadow-sm hover:shadow-[0_8px_24px_rgba(37,99,235,0.12)] transition-all duration-300 hover:-translate-y-1 disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} strokeWidth={2.2} />
           <span>Refresh</span>
