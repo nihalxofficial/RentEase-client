@@ -5,17 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import { 
-  Form, 
-  Input, 
-  Label, 
-  TextField, 
-  Button, 
-  FieldError, 
+import {
+  Form,
+  Input,
+  Label,
+  TextField,
+  Button,
+  FieldError,
   Description,
   InputGroup,
 } from "@heroui/react";
-import { 
+import {
   User,
   Mail,
   Lock,
@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // ==================== REGISTER PAGE ====================
 export default function RegisterClient() {
@@ -38,26 +38,29 @@ export default function RegisterClient() {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || "/";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     const formData = new FormData(e.currentTarget);
     const userData = Object.fromEntries(formData.entries());
-    const {email, password, image, name} = userData;
+    const { email, password, image, name } = userData;
 
     const { data, error } = await authClient.signUp.email({
-        email, 
-        password,
-        name,
-        image,
+      email,
+      password,
+      name,
+      image,
     })
 
-    if(data){
+    if (data) {
       toast.success("Registration Successful🎉");
-      router.push("/")
+      router.push(redirectTo)
     }
-    if(error){
+    if (error) {
       toast.error(error.message);
     }
     setIsLoading(false);
@@ -228,7 +231,7 @@ export default function RegisterClient() {
               </p>
             </div>
 
-            <Form 
+            <Form
               className="flex flex-col gap-5"
               onSubmit={handleSubmit}
             >
@@ -413,7 +416,7 @@ export default function RegisterClient() {
 
             <p className="text-center text-sm text-gray-500 mt-6">
               Already have an account?{' '}
-              <Link href="/auth/login" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+              <Link href={`/auth/login?redirect=${redirectTo}`} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
                 Sign In
               </Link>
             </p>

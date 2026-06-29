@@ -26,7 +26,7 @@ import {
   LogIn,
 } from "lucide-react";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 // ==================== LOGIN PAGE ====================
@@ -35,6 +35,9 @@ export default function LoginClient() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +55,7 @@ export default function LoginClient() {
 
     if(data){
       toast.success("Login Successful🎉")
-      router.push("/")
+      router.push(redirectTo)
     }
 
     if(error){
@@ -330,7 +333,7 @@ export default function LoginClient() {
 
             <p className="text-center text-sm text-gray-500 mt-6">
               Don&apos;t have an account?{' '}
-              <Link href="/auth/register" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+              <Link href={`/auth/register?redirect=${redirectTo}`} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
                 Create Account
               </Link>
             </p>
