@@ -1,8 +1,9 @@
 import { serverFetch } from "../core/server"
 
-export const getProperties = async(filter, status="approved")=>{
-    return serverFetch(`/properties?${filter}&status=${status}`)
-}
+export const getProperties = async (filter, status) => {
+  const statusParam = status ? `&status=${status}` : "";
+  return serverFetch(`/properties?${filter}${statusParam}`);
+};
 export const getFeaturedProperties = async(status="approved")=>{
     return serverFetch(`/properties?$isFeatured=true&status=${status}`)
 }
